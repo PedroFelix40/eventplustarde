@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
 import "./Nav.css";
-import logoDesktop from "../../assets/images/logo-pink.svg";
+
 import logoMobile from "../../assets/images/logo-white.svg";
+import logoDesktop from "../../assets/images/logo-pink.svg";
 import { Link } from "react-router-dom";
 import { UserContext } from "../../context/AuthContext";
 
-const Nav = ({ setExibeNavbar, exibeNavbar }) => {
-  // os dados serão utlilizados apenas para pesquisa
+const Nav = ({ exibeNavbar, setExibeNavbar }) => {
   const { userData } = useContext(UserContext);
 
   return (
@@ -20,7 +20,7 @@ const Nav = ({ setExibeNavbar, exibeNavbar }) => {
         x
       </span>
 
-      <Link to="/">
+      <Link to="/" className="eventlogo">
         <img
           className="eventlogo__logo-image"
           src={window.innerWidth >= 992 ? logoDesktop : logoMobile}
@@ -29,27 +29,29 @@ const Nav = ({ setExibeNavbar, exibeNavbar }) => {
       </Link>
 
       <div className="navbar__items-box">
-        {/* Link público */}
-        <Link className="navbar__items-box__link" to="/">
+        <Link to="/" className="navbar__item">
           Home
         </Link>
 
-        {/* Link privado */}
-        {userData.role === "Administrador" ? (
+        {userData.nome && userData.role === "Administrador" ? (
           <>
-            <Link className="navbar__items-box__link" to="/tipo-eventos">
-              Tipo Eventos
+            <Link className="navbar__item" to="/tipo-eventos">
+              Tipos Evento
             </Link>
-            <Link className="navbar__items-box__link" to="/eventos">
+            <Link className="navbar__item" to="/eventos">
               Eventos
             </Link>
           </>
-        ) : //if
-        userData.role === "Comum" ? (
-          <Link className="navbar__items-box__link" to="/eventos-aluno">
+        ) : userData.nome && userData.role === "Comum" ? (
+          <Link className="navbar__item" to="/eventos-aluno">
             Eventos
           </Link>
-        ) : (null)}
+        ) : null}
+
+        {/* <Link  className='navbar__item' to="/login">Login</Link> */}
+        {/* <Link className="navbar__item" to="/testes">
+          Testes
+        </Link> */}
       </div>
     </nav>
   );

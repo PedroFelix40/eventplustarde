@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React from "react";
 
-const Button = (props) => { //construtor
-    return (
-        <button type={props.tipo}>
-            {props.textoBotao}
-        </button>
-    );
+const Button = ({ textButton, type }) => {
+  return (
+    <button 
+      type={type}
+    >
+      {textButton}
+    </button>
+  );
 };
 
 export default Button;

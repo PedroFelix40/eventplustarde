@@ -1,34 +1,40 @@
 import React from "react";
-import { dateFormatDbToView } from "../../Utils/stringFunctions";
 import "./NextEvent.css";
+
 import { Tooltip } from "react-tooltip";
 
-const NextEvent = ({ idEvento, title, description, eventDate }) => {
-  function conectar(idEvento) {
-    alert(`Conectando ao evento: ${idEvento}`);
-  }
+// importar a função lá do arquivo stringFunction (destructuring)
+import { dateFormatDbToView } from "../../Utils/stringFunctions";
 
+const NextEvent = ({ title, description, eventDate, idEvent }) => {
+  function conectar(idEvent) {
+    // dá pra usar a prop idEvent? testar
+    alert(`Chamar o recurso para conectar: ${idEvent}`);
+  }
   return (
     <article className="event-card">
       <h2 className="event-card__title">{title}</h2>
 
       <p
         className="event-card__description"
-        data-tooltip-id={idEvento}
+        
+        data-tooltip-id={idEvent}
         data-tooltip-content={description}
         data-tooltip-place="top"
       >
-        <Tooltip id={idEvento} />
-        {description.substr(0, 16)}...
+        <Tooltip id={idEvent} className="tooltip" />
+        {description.substr(0, 15)} ...
       </p>
 
-      <p className="event-card__description">{dateFormatDbToView(eventDate)}</p>
+      <p className="event-card__description">
+        {/* aplicar a função pra converter a data */}
+        {dateFormatDbToView(eventDate)}
+      </p>
 
       <a
         onClick={() => {
-          conectar(12345);
+          conectar(idEvent);
         }}
-        href=""
         className="event-card__connect-link"
       >
         Conectar

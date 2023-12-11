@@ -1,18 +1,24 @@
 import React from "react";
 import "./TableEv.css";
-
+// import editPen from "../../../assets/images/edit-pen.svg";
 import editPen from "../../../assets/images/edit-pen.svg";
 import trashDelete from "../../../assets/images/trash-delete.svg";
-import { dateFormatDbToView } from "../../../Utils/stringFunctions";
+import { dateFormateDbToView } from "../../../Utils/stringFunctions";
+
+// importa a biblioteca de tootips ()
+import "react-tooltip/dist/react-tooltip.css";
 import { Tooltip } from "react-tooltip";
 
-const TableEv = ({ dados, fnUpdate, fnDelete }) => {
+// import trashDelete from "../../../assets/images/trash-delete.svg";
+
+const Table = ({ dados, fnDelete = null, fnUpdate = null }) => {
+  // console.log(dados);
   return (
     <table className="table-data">
       <thead className="table-data__head">
         <tr className="table-data__head-row">
           <th className="table-data__head-title table-data__head-title--big">
-            Título
+            Evento
           </th>
           <th className="table-data__head-title table-data__head-title--big">
             Descrição
@@ -31,54 +37,59 @@ const TableEv = ({ dados, fnUpdate, fnDelete }) => {
           </th>
         </tr>
       </thead>
-
-      <tbody className="table-data__tbody">
-        {/* map dos dados */}
-        {/* criar um map na variável dados e colocar a linha abaixo dentro do return do map */}
-
-        {dados.map((dados) => {
+      <tbody>
+        {dados.map((tp) => {
           return (
-            <tr key={dados.idEvento} className="table-data__head-row">
+            <tr className="table-data__head-row" key={tp.idEvento}>
               <td className="table-data__data table-data__data--big">
-                {dados.nomeEvento}
+                {tp.nomeEvento}
+              </td>
+              <td
+                className="table-data__data table-data__data--big table-data__data--handover"
+                data-tooltip-id="description-tooltip"
+                data-tooltip-content={tp.descricao}
+                data-tooltip-place="top"
+              >
+                {tp.descricao.substr(0, 15)} ...
+                <Tooltip
+                  id="description-tooltip"
+                  className="custom-tootip"
+                />
               </td>
               <td className="table-data__data table-data__data--big">
-                <p
-                  className="event-card__description"
-                  data-tooltip-id={dados.idEvento}
-                  data-tooltip-content={dados.descricao}
-                  data-tooltip-place="top"
-                >
-                  <Tooltip id={dados.idEvento} className="custom-tootip" />
-                  {dados.descricao.substr(0, 16)}...
-                </p>
+                {tp.tiposEvento.titulo}
               </td>
               <td className="table-data__data table-data__data--big">
-                {dados.tiposEvento.titulo}
-              </td>
-              <td className="table-data__data table-data__data--big">
-                {dateFormatDbToView(dados.dataEvento)}
+                {dateFormateDbToView(tp.dataEvento)}
               </td>
 
               <td className="table-data__data table-data__data--little">
                 <img
                   className="table-data__icon"
+                  idevento={tp.idEvento}
                   src={editPen}
                   alt=""
-                  onClick={() => {
-                    fnUpdate(dados.idEvento);
-                  }}
+                  onClick={(e) =>
+                    // dá pra passar o obhjeto tp direto?
+                    fnUpdate({//showUpdateForma(??)
+                      idEvento: tp.idEvento,
+                      nomeEvento: tp.nomeEvento,
+                      dataEvento: tp.dataEvento,
+                      descricao: tp.descricao,
+                      idInstituicao: tp.idInstituicao, //por enquanto chumbado
+                      idTipoEvento: tp.idTipoEvento
+                    })
+                  }
                 />
               </td>
 
               <td className="table-data__data table-data__data--little">
                 <img
                   className="table-data__icon"
+                  idevento={tp.idEvento}
                   src={trashDelete}
                   alt=""
-                  onClick={() => {
-                    fnDelete(dados.idEvento);
-                  }}
+                  onClick={(e) => fnDelete(e.target.getAttribute("idevento"))}
                 />
               </td>
             </tr>
@@ -89,4 +100,4 @@ const TableEv = ({ dados, fnUpdate, fnDelete }) => {
   );
 };
 
-export default TableEv;
+export default Table;
