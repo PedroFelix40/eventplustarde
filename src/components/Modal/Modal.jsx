@@ -1,5 +1,6 @@
-import React, {useEffect, useState } from "react";
+import React, { useEffect, useContext } from "react";
 import trashDelete from "../../assets/images/trash-delete-red.png";
+import { UserContext } from "../../context/AuthContext";
 
 import { Button, Input } from "../FormComponents/FormComponents";
 import "./Modal.css";
@@ -7,35 +8,30 @@ import "./Modal.css";
 const Modal = ({
   modalTitle = "Feedback",
   comentaryText = "Não informado. Não informado. Não informado.",
-  showHideModal = false,
-  fnDelete = null,
-  fnGet = null,
-  fnPost = null,
   userId = null,
-  idEvento = null,
-  idComentario = null,
+  showHideModal = false,
+  fnPost = null,
+  fnGet = null,
+  fnDelete = null
+
 }) => {
-  const [comentarioDesc, setComentarioDesc] = useState("");
 
-  useEffect(() => {
-    carregarDados();
-  }, []);
+  const { userData, setUserData } = useContext(UserContext);
+  useEffect(() =>{
+    async function carregarDados() { 
+      fnGet();
+    }
 
-  async function carregarDados() {
-    await fnGet(userId, idEvento);
-  }
+    carregarDados()
+  },[])
 
   return (
     <div className="modal">
       <article className="modal__box">
+        
         <h3 className="modal__title">
           {modalTitle}
-          <span
-            className="modal__close"
-            onClick={() => showHideModal(idEvento)}
-          >
-            x
-          </span>
+          <span className="modal__close" onClick={()=> showHideModal(true)}>x</span>
         </h3>
 
         <div className="comentary">
@@ -44,9 +40,8 @@ const Modal = ({
             src={trashDelete}
             className="comentary__icon-delete"
             alt="Ícone de uma lixeira"
-            onClick={async () => {
-              await fnDelete(idComentario);
-              await carregarDados();
+            onClick={() =>{
+              fnDelete()
             }}
           />
 
@@ -58,25 +53,16 @@ const Modal = ({
         <Input
           placeholder="Escreva seu comentário..."
           additionalClass="comentary__entry"
-          value={comentarioDesc}
-          manipulationFunction={(e) => {
-            setComentarioDesc(e.target.value);
-          }}
         />
-        {/* {comentarioDesc} */}
-        
+
         <Button
           textButton="Comentar"
           additionalClass="comentary__button"
-          manipulationFunction={async () => {
-            if (idComentario !== null) {
-                alert("Já existe um comentàrio cadastrado para o evento.");
-              } else {
-                
-                await fnPost(comentarioDesc.trim(), userId, idEvento);
-                await carregarDados();
-              }
-              setComentarioDesc("");//;limpa o campo do input
+          manipulationFunction={ () =>{
+            fnPost({
+              //idUsuario: userData.idUsuario,
+              //idEvento: idEvento
+            })
           }}
         />
       </article>

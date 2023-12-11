@@ -1,34 +1,35 @@
-import React, { useState } from "react";
-import "./Header.css";
+import React, { useState } from 'react';
+import './Header.css';
+import Container from '../Container/Container';
+import Nav from '../Nav/Nav'
+import PerfilUsuario from '../PerfilUsuario/PerfilUsuario'
+import menubar from '../../assets/images/menubar.png'
 
-import Container from "../Container/Container";
-import Nav from "../Nav/Nav";
-import PerfilUsuario from "../PerfilUsuario/PerfilUsuario";
-
-import menubar from "../../assets/images/menubar.png";
 
 
 const Header = () => {
+    const [exibeNavbar, setExibeNavbar] = useState(false)
+    return (
+        <header className='headerpage'>
+            <Container>
+                <div className='header-flex '>
+                    <img 
+                        className='headerpage__menubar'
+                        src={menubar} 
+                        alt="Imagem de barras. Serve para esconder o menu no smartphone" 
+                        onClick={() => {setExibeNavbar(true)}}
+                    />
 
-  const [exibeNavbar, setExibeNavbar] = useState(false);//exibe/esconde menu
+                    <Nav 
+                    exibeNavbar={exibeNavbar}
+                    setExibeNavbar={setExibeNavbar}
+                    />
 
-  return (
-    <header className="headerpage">
-      <Container>
-        <div className="header-flex">
-          <img
-            src={menubar}
-            alt="Imagem menu de barras. Serve para exibir ou esconder o menu no smartphone."
-            onClick={()=>{setExibeNavbar(true)}}
-            className="headerpage__menubar"
-          />
-
-          <Nav exibeNavbar={exibeNavbar} setExibeNavbar={setExibeNavbar} />
-          <PerfilUsuario />
-        </div>
-      </Container>
-    </header>
-  );
+                    <PerfilUsuario/>
+                </div>
+            </Container>
+        </header>
+    );
 };
 
 export default Header;

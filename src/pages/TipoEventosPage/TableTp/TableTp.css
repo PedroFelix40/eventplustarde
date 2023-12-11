@@ -24,6 +24,16 @@
     /* border: 1px solid white; */
 }
 
+.table-data__tbody{
+    overflow: auto;
+    max-height: 466px;
+} 
+
+.table-data__tbody::-webkit-scrollbar{
+    width: 0;
+}
+
+
 .table-data__head-row {
     width: 100%;
     display: flex;

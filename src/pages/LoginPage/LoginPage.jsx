@@ -1,55 +1,71 @@
 import React, { useContext, useEffect, useState } from "react";
-import ImageIllustrator from "../../components/ImageIllustrator/ImageIllustrator";
-import logo from "../../assets/images/logo-pink.svg";
-import { Input, Button } from "../../components/FormComponents/FormComponents";
+import ImageIllustrator from "../../Components/ImageIllustrator/ImageIllustrator";
 import loginImage from "../../assets/images/login.svg";
-import api, { loginResource } from "../../Services/Service";
-import { useNavigate } from "react-router-dom";
+import logo from "../../assets/images/logo-pink.svg";
+import { Input, Button } from "../../Components/FormComponents/FormComponents";
+import api from "../../Services/Service";
 
 import "./LoginPage.css";
-import { UserContext, userDecodeToken } from "../../context/AuthContext";
+import { UserContext, UserDecodeToken } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+
+// Notificacao
+import Notification from "../../Components/Notification/Notification";
 
 const LoginPage = () => {
-  const [user, setUser] = useState({ email: "edu@admin.com", senha: "123456" });
-  //importa os dados globais do usuário
+  // Este user serve para trabalharmos com os dados recebidos através do form
+  const [user, setUser] = useState({ email: "", senha: "" });
+  // notificação
+  const [notifyUser, setNotifyUser] = useState({});
+
+  // Nesta parte instanciamos o Context, para que a sessão LoginPage tenha acesso aos dados
   const { userData, setUserData } = useContext(UserContext);
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (userData.nome) {
+    if (userData.name) {
       navigate("/");
     }
   }, [userData]);
 
-  async function handleSubmit(e) {
+  async function handSubmit(e) {
     e.preventDefault();
 
-    // validar usuário e senha:
-    // tamanho mínimo de caracteres : 3
-    if (user.email.length >= 3 && user.senha.length >= 3) {
-      
-      
+    if (user.email.length >= 3 && user.senha.length > 3) {
       try {
-        const promise = await api.post(loginResource, {
+        // Ao fazer o login, precisamos passar a rota e o objeto: (`\rota`, {objeto})
+        const promisse = await api.post(`/Login`, {
           email: user.email,
           senha: user.senha,
         });
 
-        const userFullToken = userDecodeToken(promise.data.token); // decodifica o token vindo da api
+        const userFullToken = UserDecodeToken(promisse.data.token);
+        setUserData(userFullToken); // Guarda os dados decodificados da payload
 
-        setUserData(userFullToken); // guarda o token globalmente
-        localStorage.setItem("token", JSON.stringify(userFullToken));
-        navigate("/"); //envia o usuário para a home
+        localStorage.setItem("token", JSON.stringify(userFullToken)); // Guarda os dados do token no localStorage(é necessário transformar o objeto em string)
+
+        navigate("/"); // Manda o usuário para a Home
       } catch (error) {
-        // erro da api: bad request (401) ou erro de conexão
-        alert("Verifique os dados e a conexão com a internet!");
-        console.log("ERROS NO LOGIN DO USUÁRIO");
-        console.log(error);
+        setNotifyUser({
+          titleNote: "Sucesso",
+          textNote: `Senha incorreta`,
+          imgIcon: "warning",
+          imgAlt: "",
+          showMessage: true,
+        });
       }
     } else {
-      alert("Preencha os dados corretamente");
+      setNotifyUser({
+        titleNote: "Sucesso",
+        textNote: `Dados incorretos`,
+        imgIcon: "warning",
+        imgAlt: "",
+        showMessage: true,
+      });
     }
   }
+
   return (
     <div className="layout-grid-login">
       <div className="login">
@@ -58,14 +74,14 @@ const LoginPage = () => {
           <ImageIllustrator
             imageRender={loginImage}
             altText="Imagem de um homem em frente de uma porta de entrada"
-            additionalClass="login-illustrator"
+            additionalClass="login-illustrator "
           />
         </div>
 
         <div className="frm-login">
           <img src={logo} className="frm-login__logo" alt="" />
 
-          <form className="frm-login__formbox" onSubmit={handleSubmit}>
+          <form className="frm-login__formbox" onSubmit={handSubmit}>
             <Input
               additionalClass="frm-login__entry"
               type="email"
@@ -91,18 +107,18 @@ const LoginPage = () => {
               manipulationFunction={(e) => {
                 setUser({
                   ...user,
-                  senha: e.target.value.trim(),
+                  senha: e.target.value,
                 });
               }}
               placeholder="****"
             />
 
-            <a href="" className="frm-login__link">
+            <a href="https://dontpad.com" className="frm-login__link">
               Esqueceu a senha?
             </a>
 
             <Button
-              textButton="Login"
+              textButton={"Login"}
               id="btn-login"
               name="btn-login"
               type="submit"
@@ -111,6 +127,7 @@ const LoginPage = () => {
           </form>
         </div>
       </div>
+      <Notification {...notifyUser} setNotifyUser={setNotifyUser} />
     </div>
   );
 };

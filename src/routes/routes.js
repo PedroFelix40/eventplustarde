@@ -1,23 +1,25 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom"; //v6
 
-// imports dos componentes de página
-import HomePage from "../pages/HomePage/HomePage";
-import TipoEventos from "../pages/TipoEventosPage/TipoEventosPage";
-import EventosPage from "../pages/EventosPage/EventosPage";
-import LoginPage from "../pages/LoginPage/LoginPage";
-import TestePage from "../pages/TestePage/TestePage";
-import Header from "../components/Header/Header";
-import Footer from "../components/Footer/Footer";
+//import dos componentes de rota
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+//import dos componentes da página
+import HomePage from "../Pages/HomePage/HomePage";
+import LoginPage from "../Pages/LoginPage/LoginPage";
+import EventosPage from "../Pages/EventosPage/EventosPage";
+import EventosAlunoPage from "../Pages/EventosAlunoPage/EventosAlunoPage";
+import TipoEventosPage from "../Pages/TipoEventosPage/TipoEventosPage";
+import TestePage from "../Pages/TestePage/TestePage";
+
+import Header from "../Components/Header/Header";
+import Footer from "../Components/Footer/Footer";
 import { PrivateRoute } from "./PrivateRoute";
-import EventosAlunoPage from "../pages/EventosAlunoPage/EventosAlunoPage";
 
-// Componente Rota
 const Rotas = () => {
   return (
+    // criar a estrutura de rotas
     <BrowserRouter>
       <Header />
-
       <Routes>
         <Route element={<HomePage />} path="/" exact />
 
@@ -25,11 +27,10 @@ const Rotas = () => {
           path="/tipo-eventos"
           element={
             <PrivateRoute redirectTo="/">
-              <TipoEventos />
+              <TipoEventosPage />
             </PrivateRoute>
           }
         />
-
         <Route
           path="/eventos"
           element={
@@ -48,10 +49,13 @@ const Rotas = () => {
           }
         />
 
-        <Route element={<LoginPage />} path="/login" />
+        <Route
+          path="/login"
+          element={<LoginPage />}
+        />
+
         <Route element={<TestePage />} path="/testes" />
       </Routes>
-
       <Footer />
     </BrowserRouter>
   );

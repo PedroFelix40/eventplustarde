@@ -1,19 +1,24 @@
-import React from "react";
+import React, {useState} from "react";
 
-const Input = ({ onChange, type, placeholder, name, id, value }) => {
+const Input = (props) => { ///construtor
+  const [meuValor, setMeuValor] = useState();
 
   return (
-    <>
-      <input
-        type={type}
-        placeholder={placeholder}
-        name={name}
-        id={id}
-        value={value}
-        onChange={onChange}
-      />
-      <span>{value}</span>
-    </>
+    <div>
+      <input 
+      type={props.tipo} 
+      id={props.id} 
+      name={props.nome} 
+      placeholder={props.dicaCampo} 
+      value={props.valor} 
+      onChange={(e) => {
+     //   setMeuValor(e.target.value) //valor do atual componente
+
+     props.fnAltera(e.target.value)
+      }} />
+
+      <span>{props.valor}</span>
+    </div>
   );
 };
 
