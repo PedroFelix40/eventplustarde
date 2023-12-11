@@ -42,6 +42,7 @@ export const loginResource = '/Login';
 
 // const apiPort = '5000';
 // const localApiUri = `http://localhost:${apiPort}/api`;
+// Nova string de conexão
 const externallApiUri = `https://eventapiwebpedro.azurewebsites.net/api`;
 // const externalApiUri = null;
 
