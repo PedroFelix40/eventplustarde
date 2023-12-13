@@ -18,7 +18,6 @@ import { dateFormatDbToView } from "../../Utils/stringFunctions";
 const DetalhesEvento = ({ dados }) => {
   const { userData } = useContext(UserContext);
   const [todosComentarios, setTodosComentarios] = useState([]);
-  const [todosComentariosTrue, setTodosComentariosTrue] = useState([]);
 
   const { idEvento } = useParams();
 
