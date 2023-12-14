@@ -4,6 +4,8 @@ import { useEffect } from "react";
 
 // Serviços
 import api from "../../Services/Service";
+import { useParams } from "react-router-dom";
+import { dateFormatDbToView } from "../../Utils/stringFunctions";
 
 // Dados do usuário
 import { UserContext } from "../../context/AuthContext";
@@ -12,16 +14,15 @@ import { UserContext } from "../../context/AuthContext";
 import MainContent from "../../components/MainContent/MainContent";
 import Container from "../../components/Container/Container";
 import Title from "../../components/Title/Title";
-import { useParams } from "react-router-dom";
-import { dateFormatDbToView } from "../../Utils/stringFunctions";
 
-const DetalhesEvento = ({ dados }) => {
+const DetalhesEvento = ({}) => {
   const { userData } = useContext(UserContext);
   const [todosComentarios, setTodosComentarios] = useState([]);
 
+  // Use o parametro passado pela url
   const { idEvento } = useParams();
 
-  async function AllComentsEvents(id) {
+  async function AllComentsEvents() {
     try {
       if (userData.role === "Administrador") {
         const promise = await api.get(
@@ -43,14 +44,56 @@ const DetalhesEvento = ({ dados }) => {
 
   useEffect(() => {
     AllComentsEvents();
-  }, [AllComentsEvents]);
+  }, [todosComentarios]);
   return (
     <MainContent>
       <Container>
         <Title titleText={"Detalhes Eventos"} additionalClass="custom-title" />
         <br />
 
-        {todosComentarios.map((d) => {
+        <table className="tbal-data">
+          <thead className="tbal-data__head">
+            <tr className="tbal-data__head-row tbal-data__head-row--red-color">
+              <th className="tbal-data__head-title tbal-data__head-title--big">
+                Nome do Evento
+              </th>
+              <th className="tbal-data__head-title tbal-data__head-title--big">
+                Nome do usuário
+              </th>
+              <th className="tbal-data__head-title tbal-data__head-title--big">
+                Lista de Feedback
+              </th>
+              <th className="tbal-data__head-title tbal-data__head-title--big">
+                Data
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {todosComentarios.map((d) => {
+              return (
+                <tr className="tbal-data__head-row">
+                  <td className="tbal-data__data tbal-data__data--big">
+                    {d.evento.nomeEvento}
+                  </td>
+
+                  <td className="tbal-data__data tbal-data__data--big tbal-data__btn-actions">
+                    {d.usuario.nome}
+                  </td>
+
+                  <td className="tbal-data__data tbal-data__data--big tbal-data__btn-actions">
+                    {d.descricao}
+                  </td>
+
+                  <td className="tbal-data__data tbal-data__data--big tbal-data__btn-actions">
+                    {dateFormatDbToView(d.evento.dataEvento)}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+
+        {/* {todosComentarios.map((d) => {
           return (
             <div>
               <p>id: {d.idEvento}</p>
@@ -62,7 +105,7 @@ const DetalhesEvento = ({ dados }) => {
               <br />
             </div>
           );
-        })}
+        })} */}
       </Container>
     </MainContent>
   );

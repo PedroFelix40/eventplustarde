@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./HomePage.css";
 
+// Componentes
 import Banner from "../../components/Banner/Banner";
 import MainContent from "../../components/MainContent/MainContent";
 import VisionSection from "../../components/VisionSection/VisionSection";
@@ -51,7 +52,7 @@ const HomePage = () => {
       {/* PRÓXIMOS EVENTOS */}
       <section className="proximos-eventos">
         <Container>
-          {/* <Title titleText={"Próximos Eventos"} /> */}
+          <Title titleText={"Próximos Eventos"} />
 
           <div className="events-box">
             {nextEvents.map((e) => {
