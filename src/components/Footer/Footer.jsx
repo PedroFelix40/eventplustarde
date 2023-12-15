@@ -3,7 +3,7 @@ import './Footer.css';
 
 // import Container from '../Container/Container';
 
-const Footer = ({ textRights = "Escola Senai de Iinformática - 2023" }) => {
+const Footer = ({ textRights = "Escola Senai de Informática - 2023" }) => {
     
     return (
         

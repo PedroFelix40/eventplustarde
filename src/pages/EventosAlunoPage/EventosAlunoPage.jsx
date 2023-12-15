@@ -171,21 +171,21 @@ const EventosAlunoPage = () => {
 
   // cadastrar um comentário = post
   const postMyCommentary = async (descricao, idUsuario, idEvento) => {
-    try {
-      const promise = await api.post(commentaryEventResource, {
-        descricao: descricao,
-        exibe: true,
-        idUsuario: idUsuario,
-        idEvento: idEvento,
-      });
+      try {
+        const promise = await api.post(commentaryEventResource, {
+          descricao: descricao,
+          exibe: true,
+          idUsuario: idUsuario,
+          idEvento: idEvento,
+        });
 
-      if (promise.status === 200) {
-        alert("Comentário cadastrado com sucesso");
+        if (promise.status === 200) {
+          alert("Comentário cadastrado com sucesso");
+        }
+      } catch (error) {
+        console.log("Erro ao cadastrar o evento");
+        console.log(error);
       }
-    } catch (error) {
-      console.log("Erro ao cadastrar o evento");
-      console.log(error);
-    }
   };
 
   // remove o comentário - delete
